@@ -1,32 +1,29 @@
 import {
   Entity,
-  PrimaryGeneratedColumn,
   Column,
+  PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 import { AbstractMethods } from './abstractMethods';
 
-@Entity({ name: 'ongs' })
-export class Ong extends AbstractMethods {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+@Entity({ name: 'incidents' })
+export class Incident extends AbstractMethods {
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @Column()
-  name: string;
+  ong_id: string;
 
   @Column()
-  email: string;
+  title: string;
 
   @Column()
-  whatsapp: string;
+  description: string;
 
   @Column()
-  city: string;
-
-  @Column()
-  uf: string;
+  value: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

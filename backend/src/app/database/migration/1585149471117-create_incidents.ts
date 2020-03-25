@@ -1,49 +1,46 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm';
 
-export class createOngs1585107090303 implements MigrationInterface {
+export class createIncidents1585149471117 implements MigrationInterface {
   private table = new Table({
-    name: 'ongs',
+    name: 'incidents',
+
     columns: [
       {
         name: 'id',
-        type: 'uuid',
+        type: 'integer',
         isPrimary: true,
-        generationStrategy: 'uuid',
-        default: 'uuid_generate_v4()',
+        isGenerated: true,
+        generationStrategy: 'increment',
       },
       {
-        name: 'name',
+        name: 'ong_id',
+        type: 'uuid',
+        isNullable: false,
+      },
+      {
+        name: 'title',
         type: 'varchar',
         length: '255',
         isNullable: false,
       },
 
       {
-        name: 'email',
+        name: 'description',
         type: 'varchar',
         length: '255',
         isNullable: false,
-        isUnique: true,
       },
       {
-        name: 'whatsapp',
-        type: 'varchar',
+        name: 'value',
+        type: 'decimal',
         length: '15',
         isNullable: false,
       },
-      {
-        name: 'city',
-        type: 'varchar',
-        length: '120',
-        isNullable: false,
-      },
-      {
-        name: 'uf',
-        type: 'varchar',
-        length: '2',
-        isNullable: false,
-      },
-
       {
         name: 'created_at',
         type: 'timestamptz',
@@ -55,6 +52,16 @@ export class createOngs1585107090303 implements MigrationInterface {
         type: 'timestamptz',
         isNullable: false,
         default: 'now()',
+      },
+    ],
+
+    foreignKeys: [
+      {
+        columnNames: ['ong_id'],
+        referencedColumnNames: ['id'],
+        referencedTableName: 'ongs',
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
     ],
   });
