@@ -1,25 +1,23 @@
 import * as express from 'express';
-import Routes from '../routes';
 
+import Routes from '../routes';
 import DbConnection from '../app/config/database';
 
 class App {
   constructor() {
-    this.routes();
     this.middleware();
+    this.routes();
     this.database();
   }
-
   private app = express();
-
   private port = 3333;
-
-  private routes() {
-    this.app.use(Routes);
-  }
 
   private middleware() {
     this.app.use(express.json());
+  }
+
+  private routes() {
+    this.app.use(Routes);
   }
 
   private async database(): Promise<void> {
