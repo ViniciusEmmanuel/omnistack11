@@ -4,12 +4,15 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  BeforeInsert,
+  AfterLoad,
+  BaseEntity,
 } from 'typeorm';
 
-import { AbstractMethods } from './abstractMethods';
+import { hash, compare } from 'bcryptjs';
 
 @Entity({ name: 'ongs' })
-export class Ong extends AbstractMethods {
+export class Ong extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -18,6 +21,9 @@ export class Ong extends AbstractMethods {
 
   @Column()
   email: string;
+
+  @Column()
+  password: string;
 
   @Column()
   whatsapp: string;
@@ -33,4 +39,19 @@ export class Ong extends AbstractMethods {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @BeforeInsert()
+  async hashPassword() {
+    if (this.password) {
+      this.password = await hash(this.password, 8);
+    }
+  }
+
+  @AfterLoad()
+  hiddenPassword() {
+    console.log(this);
+    if (this.password) {
+      delete this.password;
+    }
+  }
 }

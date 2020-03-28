@@ -4,12 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  BaseEntity,
 } from 'typeorm';
 
-import { AbstractMethods } from './abstractMethods';
-
 @Entity({ name: 'incidents' })
-export class Incident extends AbstractMethods {
+export class Incident extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 

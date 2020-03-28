@@ -26,9 +26,15 @@ export class createOngs1585107090303 implements MigrationInterface {
         isUnique: true,
       },
       {
+        name: 'password',
+        type: 'varchar',
+        length: '60',
+        isNullable: false,
+      },
+      {
         name: 'whatsapp',
         type: 'varchar',
-        length: '15',
+        length: '11',
         isNullable: false,
       },
       {
@@ -39,7 +45,7 @@ export class createOngs1585107090303 implements MigrationInterface {
       },
       {
         name: 'uf',
-        type: 'varchar',
+        type: 'char',
         length: '2',
         isNullable: false,
       },
