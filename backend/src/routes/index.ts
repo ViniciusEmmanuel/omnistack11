@@ -2,8 +2,11 @@ import * as express from 'express';
 
 const Route = express.Router();
 
-Route.get('/', (_, res) => {
-  return res.status(200).json('Helo Word');
-});
+import { OngController } from '../app/controllers/OngController';
+import { IncidentController } from '../app/controllers/IncidentController';
+
+Route.post('/ongs', OngController.store);
+
+Route.post('/incidents', IncidentController.store);
 
 export default Route;
