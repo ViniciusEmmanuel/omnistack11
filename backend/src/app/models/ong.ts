@@ -5,7 +5,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BeforeInsert,
-  AfterLoad,
   BaseEntity,
 } from 'typeorm';
 
@@ -47,11 +46,11 @@ export class Ong extends BaseEntity {
     }
   }
 
-  @AfterLoad()
-  hiddenPassword() {
-    console.log(this);
+  async comparePassword(password: string) {
     if (this.password) {
-      delete this.password;
+      return compare(password, this.password);
     }
+
+    return false;
   }
 }
