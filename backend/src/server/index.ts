@@ -1,4 +1,5 @@
 import * as express from 'express';
+import * as helmet from 'helmet';
 
 import Routes from '../routes';
 import DbConnection from '../app/config/database';
@@ -9,11 +10,13 @@ class App {
     this.routes();
     this.database();
   }
+
   private app = express();
   private port = 3333;
 
   private middleware() {
     this.app.use(express.json());
+    this.app.use(helmet());
   }
 
   private routes() {
