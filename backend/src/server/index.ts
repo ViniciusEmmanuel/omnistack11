@@ -2,6 +2,7 @@ import 'dotenv/config';
 
 import * as express from 'express';
 import * as helmet from 'helmet';
+import * as cors from 'cors';
 
 import Routes from '../routes';
 import DbConnection from '../app/config/database';
@@ -19,6 +20,7 @@ class App {
   private middleware() {
     this.app.use(express.json());
     this.app.use(helmet());
+    this.app.use(cors());
   }
 
   private routes() {

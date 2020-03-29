@@ -9,11 +9,10 @@ import { OngController } from '../app/controllers/OngController';
 import { IncidentController } from '../app/controllers/IncidentController';
 
 Route.post('/session', SessionController.store);
+Route.get('/ongs', OngController.index);
 Route.post('/ongs', OngController.store);
 
 Route.use(AuthJwt);
-
-Route.get('/ongs', OngController.index);
 
 Route.get('/incidents', IncidentController.index);
 Route.post('/incidents', IncidentController.store);
