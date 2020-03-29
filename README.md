@@ -2,12 +2,12 @@
 
 ## Backend
 
-- Express
+- Express [typescript]
 - Typeorm
 
-## FontEnd
+## FrontEnd
 
-- ReactJs
+- ReactJs [typescript]
 
 ## Mobile
 
