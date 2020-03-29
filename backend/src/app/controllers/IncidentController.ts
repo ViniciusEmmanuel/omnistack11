@@ -3,12 +3,25 @@ import { Request, Response } from 'express';
 import { Incident } from '../models/incident';
 
 export abstract class IncidentController {
-  public static async index(_: Request, response: Response) {
+  public static async index(request: Request, response: Response) {
+    const { page = 1, limit = 10 } = request.query;
+
     const { ongId } = response.locals;
 
-    const incidents = await Incident.find({ where: { ong_id: ongId } });
+    const skipPages = page <= 0 ? 0 : (page - 1) * limit;
 
-    return response.status(200).json({ message: 'success', data: incidents });
+    const [incidents, total] = await Incident.findAndCount({
+      where: { ong_id: ongId },
+      order: { id: 'ASC' },
+      skip: Number(skipPages),
+      take: Number(limit),
+    });
+
+    response.header('X-Total-Count', String(total));
+
+    return response
+      .status(200)
+      .json({ message: 'success', page, total, data: incidents });
   }
 
   public static async store(request: Request, response: Response) {
