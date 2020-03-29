@@ -41,7 +41,7 @@ export abstract class OngController {
       const newOng = await Ong.create(ong).save();
       delete newOng.password;
 
-      return response.status(200).json({ message: 'success', data: newOng });
+      return response.status(201).json({ message: 'success', data: newOng });
     } catch (error) {
       return response.status(400).json({ message: String(error), data: {} });
     }
