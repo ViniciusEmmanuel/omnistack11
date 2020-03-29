@@ -4,7 +4,6 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  AfterLoad,
   ManyToOne,
   BaseEntity,
   JoinColumn,
@@ -38,16 +37,4 @@ export class Incident extends BaseEntity {
   @ManyToOne((type) => Ong)
   @JoinColumn({ name: 'ong_id' })
   ong: Ong;
-
-  @AfterLoad()
-  hiddenColumns() {
-    if (this.ong) {
-      delete this.ong.password;
-      delete this.ong.id;
-    }
-
-    if (this.ong_id) {
-      return (this.ong_id = '********');
-    }
-  }
 }

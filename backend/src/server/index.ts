@@ -5,7 +5,7 @@ import * as helmet from 'helmet';
 import * as cors from 'cors';
 
 import Routes from '../routes';
-import DbConnection from '../app/config/database';
+import { DbConnection } from '../app/config/database';
 
 class App {
   constructor() {
@@ -15,7 +15,7 @@ class App {
   }
 
   private app = express();
-  private port = 3333;
+  private port = process.env.PORT || 3333;
 
   private middleware() {
     this.app.use(express.json());

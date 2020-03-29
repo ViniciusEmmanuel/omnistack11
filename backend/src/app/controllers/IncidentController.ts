@@ -38,9 +38,13 @@ export abstract class IncidentController {
     incident.value = value;
 
     try {
-      await Incident.create(incident).save();
+      const newIncident = await Incident.create(incident).save();
 
-      return response.status(201).json({ message: 'success', data: incident });
+      delete newIncident.ong_id;
+
+      return response
+        .status(201)
+        .json({ message: 'success', data: newIncident });
     } catch (error) {
       return response.status(400).json({ message: String(error), data: [] });
     }

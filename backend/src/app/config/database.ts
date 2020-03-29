@@ -1,19 +1,28 @@
 import 'reflect-metadata';
-import { createConnections } from 'typeorm';
+import { createConnection } from 'typeorm';
+import * as path from 'path';
 
-const DbConnection = createConnections();
+const pathEntities = path.resolve(__dirname, '..', 'models', '*.{ts,js}');
+const pathMigration = path.resolve(
+  __dirname,
+  '..',
+  'database',
+  'migration',
+  ' *.{ts,js}'
+);
 
-export default DbConnection;
-
-// {
-//   type: process.env.TYPEORM_CONNECTION,
-//   host: String(process.env.TYPEORM_HOST),
-//   port: Number(process.env.TYPEORM_PORT),
-//   username: String(process.env.TYPEORM_USERNAME),
-//   password: String(process.env.TYPEORM_PASSWORD),
-//   database: String(process.env.TYPEORM_DATABASE),
-//   entities: [String(process.env.TYPEORM_ENTITIES)],
-//   migrations: [String(process.env.TYPEORM_MIGRATIONS)],
-//   synchronize: Boolean(process.env.TYPEORM_SYNCHRONIZE),
-//   logging: Boolean(process.env.TYPEORM_LOGGING),
-// }
+export const DbConnection = createConnection({
+  type: 'postgres',
+  host: String(process.env.TYPEORM_HOST),
+  port: Number(process.env.TYPEORM_PORT),
+  username: String(process.env.TYPEORM_USERNAME),
+  password: String(process.env.TYPEORM_PASSWORD),
+  database: String(process.env.TYPEORM_DATABASE),
+  entities: [pathEntities],
+  migrations: [pathMigration],
+  synchronize: false,
+  logging: true,
+  extra: {
+    ssl: true,
+  },
+});
