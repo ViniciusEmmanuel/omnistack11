@@ -5,8 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BeforeInsert,
+  OneToMany,
+  JoinColumn,
   BaseEntity,
 } from 'typeorm';
+
+import { Incident } from './incident';
 
 import { hash, compare } from 'bcryptjs';
 
@@ -38,6 +42,9 @@ export class Ong extends BaseEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany((type) => Incident, (incidents) => incidents.ong)
+  incidents: Incident[];
 
   @BeforeInsert()
   async hashPassword() {

@@ -3,7 +3,10 @@ import { Ong } from '../models/ong';
 
 export abstract class OngController {
   public static async index(_: Request, response: Response) {
-    const ongs = await Ong.find();
+    const ongs = await Ong.find({
+      relations: ['incidents'],
+      select: ['name', 'email', 'whatsapp', 'city', 'uf'],
+    });
 
     return response.status(200).json({ message: 'success', data: ongs });
   }

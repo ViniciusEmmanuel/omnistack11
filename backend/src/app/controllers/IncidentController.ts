@@ -11,6 +11,7 @@ export abstract class IncidentController {
     const skipPages = page <= 0 ? 0 : (page - 1) * limit;
 
     const [incidents, total] = await Incident.findAndCount({
+      relations: ['ong'],
       where: { ong_id: ongId },
       order: { id: 'ASC' },
       skip: Number(skipPages),

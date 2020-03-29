@@ -4,8 +4,13 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  AfterLoad,
+  ManyToOne,
   BaseEntity,
+  JoinColumn,
 } from 'typeorm';
+
+import { Ong } from './ong';
 
 @Entity({ name: 'incidents' })
 export class Incident extends BaseEntity {
@@ -29,4 +34,20 @@ export class Incident extends BaseEntity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @ManyToOne((type) => Ong)
+  @JoinColumn({ name: 'ong_id' })
+  ong: Ong;
+
+  @AfterLoad()
+  hiddenColumns() {
+    if (this.ong) {
+      delete this.ong.password;
+      delete this.ong.id;
+    }
+
+    if (this.ong_id) {
+      return (this.ong_id = '********');
+    }
+  }
 }
