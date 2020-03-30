@@ -55,12 +55,18 @@ export abstract class IncidentController {
 
     const incident = await Incident.findOne(id);
 
+    if (!incident) {
+      return response
+        .status(400)
+        .json({ message: 'Id não encontrado', data: {} });
+    }
+
     const { ongId } = response.locals;
 
     if (incident.ong_id !== ongId) {
       return response
         .status(401)
-        .json({ message: 'Operação não permitida', data: [] });
+        .json({ message: 'Operação não permitida', data: {} });
     }
 
     await Incident.delete(id);

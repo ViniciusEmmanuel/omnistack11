@@ -14,6 +14,10 @@ export async function AuthJwt(
   response: Response,
   next: NextFunction
 ) {
+  if (!ConfigJwt.secret) {
+    return response.status(500).json({ message: 'Error, contate o suporte.' });
+  }
+
   const authHeader = request.headers.authorization;
 
   if (!authHeader) {
@@ -24,11 +28,11 @@ export async function AuthJwt(
 
   try {
     const [, token] = authHeader.split(' ');
-    const decode: IJwt = await promisify(verify)(token, ConfigJwt.secret);
+    const { id } = (await promisify(verify)(token, ConfigJwt.secret)) as IJwt;
 
     response.locals = {
       ...response.locals,
-      ongId: decode.id,
+      ongId: id,
     };
 
     return next();

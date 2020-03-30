@@ -8,6 +8,12 @@ export abstract class SessionController {
   public static async store(resquest: Request, response: Response) {
     const { email, password } = resquest.body;
 
+    if (!ConfigJwt.secret) {
+      return response
+        .status(500)
+        .json({ message: 'Error, contate o suporte.' });
+    }
+
     const ong = await Ong.findOneOrFail({ where: { email } });
 
     if (!ong) {
@@ -26,6 +32,8 @@ export abstract class SessionController {
       expiresIn: ConfigJwt.expiresIn,
     });
 
-    return response.status(201).json({ token });
+    return response
+      .status(201)
+      .json({ message: 'success', data: { email, token } });
   }
 }
