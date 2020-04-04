@@ -1,5 +1,7 @@
 export interface IResposnse<T> {
   status: number;
-  message: string;
-  data?: T;
+  data?: {
+    data: T;
+    message: string;
+  };
 }

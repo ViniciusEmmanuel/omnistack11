@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import api from '../../services/api';
 import * as yup from 'yup';
+import { useHistory } from 'react-router-dom';
 
 import { FiLogIn } from 'react-icons/fi';
 
@@ -17,29 +18,38 @@ import { IResposnse } from '../../interfaces/api/IResponse';
 import { IOng } from '../../interfaces/models/IOng';
 
 export default function Logon() {
+  const history = useHistory();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
 
-    const data = { email, password };
+    const dataPost = { email, password };
 
     const schema = yup.object().shape({
       email: yup.string().email().required(),
       password: yup.string().required(),
     });
 
-    if (!(await schema.isValid(data))) {
+    if (!(await schema.isValid(dataPost))) {
       return;
     }
 
     try {
-      const { status }: IResposnse<IOng> = await api.post('/session', data);
+      const { status, data: response }: IResposnse<IOng> = await api.post(
+        '/session',
+        dataPost
+      );
       if (Number(status) === 201) {
-        //location profile
+        const user = {
+          email: response?.data.email,
+          token: response?.data.token,
+        };
 
-        localStorage.setItem('@behero/token', JSON.stringify(status));
+        localStorage.setItem('@behero/user', JSON.stringify(user));
+        history.replace('/profile', { user });
       }
     } catch (error) {
       alert('Email ou password não conferem.');
