@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useState, useEffect } from 'react';
 import api from '../../services/api';
 import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
@@ -22,6 +22,16 @@ export default function Logon() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    const user = localStorage.getItem('@behero/user');
+    if (user) {
+      const { email, token } = JSON.parse(user);
+      if (email && token) {
+        history.replace('/profile');
+      }
+    }
+  }, [history]);
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
