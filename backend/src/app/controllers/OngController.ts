@@ -1,11 +1,15 @@
 import { Request, Response } from 'express';
+import { SignJwt } from '../utils/SignJwt';
 import { Ong } from '../models/ong';
 
 export abstract class OngController {
-  public static async index(_: Request, response: Response) {
+  public static async show(_: Request, response: Response) {
+    const { ongId } = response.locals;
+
     const ongs = await Ong.find({
       relations: ['incidents'],
-      select: ['name', 'email', 'whatsapp', 'city', 'uf'],
+      where: { id: ongId },
+      select: ['name', 'email', 'whatsapp', 'city', 'uf', 'createdAt'],
     });
 
     return response.status(200).json({ message: 'success', data: ongs });
@@ -39,9 +43,15 @@ export abstract class OngController {
 
     try {
       const newOng = await Ong.create(ong).save();
-      delete newOng.password;
 
-      return response.status(200).json({ message: 'success', data: newOng });
+      const token = new SignJwt(newOng.id).jwt();
+
+      delete newOng.password;
+      delete newOng.id;
+
+      return response
+        .status(201)
+        .json({ message: 'success', data: { ...newOng, token } });
     } catch (error) {
       return response.status(400).json({ message: String(error), data: {} });
     }

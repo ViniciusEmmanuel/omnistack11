@@ -1,10 +1,19 @@
 {
   "compilerOptions": {
     "lib": ["es5", "es6"],
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "./build",
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "allowJs": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true

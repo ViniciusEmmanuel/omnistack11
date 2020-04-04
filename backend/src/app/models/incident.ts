@@ -7,6 +7,7 @@ import {
   ManyToOne,
   BaseEntity,
   JoinColumn,
+  AfterLoad,
 } from 'typeorm';
 
 import { Ong } from './ong';
@@ -37,4 +38,14 @@ export class Incident extends BaseEntity {
   @ManyToOne((type) => Ong)
   @JoinColumn({ name: 'ong_id' })
   ong: Ong;
+
+  @AfterLoad()
+  hiddenColumn() {
+    if (this.ong) {
+      delete this.ong.id;
+      delete this.ong.password;
+      delete this.ong.createdAt;
+      delete this.ong.updatedAt;
+    }
+  }
 }

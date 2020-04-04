@@ -13,6 +13,7 @@ const pathMigration = path.resolve(
 
 export const DbConnection = createConnection({
   type: 'postgres',
+  url: String(process.env.TYPEORM_URL),
   host: String(process.env.TYPEORM_HOST),
   port: Number(process.env.TYPEORM_PORT),
   username: String(process.env.TYPEORM_USERNAME),

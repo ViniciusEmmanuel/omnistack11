@@ -1,8 +1,7 @@
 import 'dotenv/config';
-
-import * as express from 'express';
-import * as helmet from 'helmet';
-import * as cors from 'cors';
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
 
 import Routes from '../routes';
 import { DbConnection } from '../app/config/database';
@@ -17,13 +16,13 @@ class App {
   private app = express();
   private port = process.env.PORT || 3333;
 
-  private middleware() {
+  private middleware(): void {
     this.app.use(express.json());
     this.app.use(helmet());
     this.app.use(cors());
   }
 
-  private routes() {
+  private routes(): void {
     this.app.use(Routes);
   }
 

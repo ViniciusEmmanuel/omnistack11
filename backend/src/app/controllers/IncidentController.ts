@@ -6,13 +6,11 @@ export abstract class IncidentController {
   public static async index(request: Request, response: Response) {
     const { page = 1, limit = 10 } = request.query;
 
-    const { ongId } = response.locals;
-
     const skipPages = page <= 0 ? 0 : (page - 1) * limit;
 
     const [incidents, total] = await Incident.findAndCount({
       relations: ['ong'],
-      where: { ong_id: ongId },
+      select: ['id', 'title', 'description', 'value', 'createdAt', 'ong'],
       order: { id: 'ASC' },
       skip: Number(skipPages),
       take: Number(limit),
@@ -55,12 +53,18 @@ export abstract class IncidentController {
 
     const incident = await Incident.findOne(id);
 
+    if (!incident) {
+      return response
+        .status(400)
+        .json({ message: 'Id não encontrado', data: {} });
+    }
+
     const { ongId } = response.locals;
 
     if (incident.ong_id !== ongId) {
       return response
         .status(401)
-        .json({ message: 'Operação não permitida', data: [] });
+        .json({ message: 'Operação não permitida', data: {} });
     }
 
     await Incident.delete(id);

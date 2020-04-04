@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import { sign } from 'jsonwebtoken';
-import { ConfigJwt } from '../config/jwt';
-
+import { SignJwt } from '../utils/SignJwt';
 import { Ong } from '../models/ong';
 
 export abstract class SessionController {
@@ -22,10 +20,10 @@ export abstract class SessionController {
         .json({ message: 'Email ou password não é valido.', data: {} });
     }
 
-    const token = sign({ id: ong.id }, ConfigJwt.secret, {
-      expiresIn: ConfigJwt.expiresIn,
-    });
+    const token = new SignJwt(ong.id).jwt();
 
-    return response.status(201).json({ token });
+    return response
+      .status(201)
+      .json({ message: 'success', data: { email, token } });
   }
 }

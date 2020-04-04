@@ -47,13 +47,13 @@ export class Ong extends BaseEntity {
   incidents: Incident[];
 
   @BeforeInsert()
-  async hashPassword() {
+  async hashPassword(): Promise<void> {
     if (this.password) {
       this.password = await hash(this.password, 8);
     }
   }
 
-  async comparePassword(password: string) {
+  async comparePassword(password: string): Promise<boolean> {
     if (this.password) {
       return compare(password, this.password);
     }
