@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, FormEvent } from 'react';
+import api from '../../services/api';
+import * as yup from 'yup';
 
 import { FiArrowLeft } from 'react-icons/fi';
 
@@ -11,7 +13,46 @@ import { Button } from '../../components/Button/styles';
 
 import { MainRegister, Container, Section } from './styles';
 
+import { IResposnse } from '../../interfaces/api/IResponse';
+import { IOng } from '../../interfaces/models/IOng';
+
 export default function NewIncident() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [value, setValue] = useState('');
+
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+
+    const dataPost = { title, description, value };
+
+    const schema = yup.object().shape({
+      title: yup.string().required(),
+      description: yup.string().required(),
+      value: yup.string().required(),
+    });
+
+    if (!(await schema.isValid(dataPost))) {
+      return;
+    }
+
+    try {
+      const { status }: IResposnse<IOng> = await api.post(
+        '/incidents',
+        dataPost
+      );
+
+      if (status === 201) {
+        setTitle('');
+        setDescription('');
+        setValue('');
+        alert('Criado com sucesso.');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <MainRegister>
       <Container>
@@ -31,10 +72,30 @@ export default function NewIncident() {
         </Section>
 
         <Section className="form">
-          <form>
-            <InputForm type="text" placeholder="Titulo do caso" />
-            <TextArea placeholder="Descrição" />
-            <InputForm type="text" placeholder="Valor em reais" />
+          <form onSubmit={handleSubmit}>
+            <InputForm
+              type="text"
+              placeholder="Titulo do caso"
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+            />
+            <TextArea
+              placeholder="Descrição"
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+              }}
+            />
+            <InputForm
+              type="text"
+              placeholder="Valor em reais"
+              value={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+            />
 
             <Button type="submit">Cadastrar</Button>
           </form>

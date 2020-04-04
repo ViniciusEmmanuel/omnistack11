@@ -1,3 +1,4 @@
+import { IIncidents } from './IIncidents';
 export interface IOng {
   name?: string;
   email?: string;
@@ -5,4 +6,5 @@ export interface IOng {
   city?: string;
   uf?: string;
   token?: string;
+  incidents: IIncidents[];
 }
