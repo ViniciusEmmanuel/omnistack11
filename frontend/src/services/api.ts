@@ -7,6 +7,10 @@ const getUrl = (): string => {
   return 'http://localhost:3333';
 };
 
+const api = axios.create({
+  baseURL: getUrl(),
+});
+
 const getToken = (): string => {
   const user = localStorage.getItem('@behero/user');
   if (user) {
@@ -17,11 +21,14 @@ const getToken = (): string => {
   return '';
 };
 
-const api = axios.create({
-  baseURL: getUrl(),
-  headers: {
-    Authorization: getToken(),
-  },
+api.interceptors.request.use((config) => {
+  const token = config.headers.common['Authorization'];
+
+  if (!token) {
+    config.headers.common['Authorization'] = getToken();
+  }
+
+  return config;
 });
 
 export default api;

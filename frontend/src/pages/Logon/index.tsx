@@ -58,6 +58,10 @@ export default function Logon() {
           token: response?.data.token,
         };
 
+        api.defaults.headers.common[
+          'Authorization'
+        ] = `Bearer ${response?.data.token}`;
+
         localStorage.setItem('@behero/user', JSON.stringify(user));
         history.replace('/profile', { user });
       }

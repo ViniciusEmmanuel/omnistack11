@@ -24,13 +24,13 @@ export default function Profile() {
     history.replace('/');
   }, [history]);
 
-  const fethcIncidentsOng = useCallback(async (): Promise<void> => {
+  const fethcIncidentsOng = async (): Promise<void> => {
     const { status, data: response }: IResposnse<IOng> = await api.get('/ongs');
 
     if (status === 200 && response) {
       setOng(response?.data);
     }
-  }, []);
+  };
 
   const handleDelete = useCallback(
     async (id) => {
@@ -59,7 +59,7 @@ export default function Profile() {
 
   useEffect(() => {
     fethcIncidentsOng();
-  }, [fethcIncidentsOng]);
+  }, []);
 
   return (
     <Container>
