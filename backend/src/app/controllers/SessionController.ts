@@ -1,18 +1,10 @@
 import { Request, Response } from 'express';
-import { sign } from 'jsonwebtoken';
-import { ConfigJwt } from '../config/jwt';
-
+import { SignJwt } from '../utils/SignJwt';
 import { Ong } from '../models/ong';
 
 export abstract class SessionController {
   public static async store(resquest: Request, response: Response) {
     const { email, password } = resquest.body;
-
-    if (!ConfigJwt.secret) {
-      return response
-        .status(500)
-        .json({ message: 'Error, contate o suporte.' });
-    }
 
     const ong = await Ong.findOneOrFail({ where: { email } });
 
@@ -28,9 +20,7 @@ export abstract class SessionController {
         .json({ message: 'Email ou password não é valido.', data: {} });
     }
 
-    const token = sign({ id: ong.id }, ConfigJwt.secret, {
-      expiresIn: ConfigJwt.expiresIn,
-    });
+    const token = new SignJwt(ong.id).jwt();
 
     return response
       .status(201)
