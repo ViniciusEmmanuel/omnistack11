@@ -8,20 +8,14 @@ import { IResposnse } from '../../../interfaces/api/IResponse';
 import { IOng } from '../../../interfaces/models/IOng';
 
 import { IAction } from '../../../interfaces/redux/redux';
+import { ILogon } from '../../../interfaces/redux/logon';
 
-interface IRequestToLogon {
-  user: {
-    email: string;
-    password: string;
-  };
-}
-
-function* requestToLogon({ payload }: IAction<IRequestToLogon>) {
+function* requestToLogon({ payload }: IAction<ILogon>) {
   try {
     const { status, data: response }: IResposnse<IOng> = yield call(
       api.post,
       `/session`,
-      payload.user
+      { ...payload }
     );
 
     if (status === 201) {
@@ -34,12 +28,15 @@ function* requestToLogon({ payload }: IAction<IRequestToLogon>) {
           auth: true,
           email: response.data.email,
           token: response.data.token,
+          loading: false,
         })
       );
     }
   } catch (error) {
     toast.error('Email ou senhas não conferem.');
-    yield put(responseToLogon({ auth: false, email: '', token: '' }));
+    yield put(
+      responseToLogon({ auth: false, email: '', token: '', loading: false })
+    );
   }
 }
 

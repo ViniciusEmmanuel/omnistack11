@@ -4,9 +4,7 @@ import { ILogon, IInicialState } from '../../../interfaces/redux/logon';
 export function requestToLogin(user: ILogon) {
   return {
     type: CONSTANTE.REQUEST_LOGON,
-    payload: {
-      user,
-    },
+    payload: user,
   };
 }
 
@@ -21,5 +19,12 @@ export function requestToLogout() {
   return {
     type: CONSTANTE.REQUEST_LOGOUT,
     payload: {},
+  };
+}
+
+export function loadingToLogon(loading: boolean) {
+  return {
+    type: CONSTANTE.LOADING_TO_REQUEST,
+    payload: { loading },
   };
 }

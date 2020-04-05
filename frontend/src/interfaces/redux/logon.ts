@@ -6,7 +6,8 @@ export interface ILogon {
 export interface IInicialState {
   email: string;
   token: string;
-  auth: any;
+  auth: boolean;
+  loading: boolean;
 }
 
 export interface IState {

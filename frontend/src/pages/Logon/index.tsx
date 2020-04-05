@@ -16,26 +16,24 @@ import { StyleLink } from '../../components/Link/styles';
 import { MainLogon, SectionForm, ImageLarge } from './styles';
 
 import { IState } from '../../interfaces/redux/logon';
-import { requestToLogin } from '../../store/redux/logon/actions';
+import {
+  requestToLogin,
+  loadingToLogon,
+} from '../../store/redux/logon/actions';
 
 export default function Logon() {
   const history = useHistory();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const auth = useSelector<IState>((state) => state.logon.auth);
+  const auth = useSelector<IState, boolean>((state) => state.logon.auth);
+  const loading = useSelector<IState, boolean>((state) => state.logon.loading);
 
   useEffect(() => {
     if (auth) {
-      setLoading(false);
       history.replace('/profile');
-    }
-
-    if (!auth) {
-      setLoading(false);
     }
   }, [history, auth]);
 
@@ -52,9 +50,11 @@ export default function Logon() {
     if (!(await schema.isValid(dataPost))) {
       return;
     }
-    setLoading(true);
+    dispatch(loadingToLogon(true));
     dispatch(requestToLogin(dataPost));
   };
+
+  console.log(loading);
 
   return (
     <MainLogon>
