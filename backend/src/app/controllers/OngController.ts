@@ -6,13 +6,15 @@ export abstract class OngController {
   public static async show(_: Request, response: Response) {
     const { ongId } = response.locals;
 
-    const ongs = await Ong.find({
+    const ong = await Ong.findOne({
       relations: ['incidents'],
       where: { id: ongId },
-      select: ['name', 'email', 'whatsapp', 'city', 'uf', 'createdAt'],
+      select: ['id', 'email', 'name', 'city', 'uf', 'createdAt'],
     });
 
-    return response.status(200).json({ message: 'success', data: ongs });
+    delete ong?.id;
+
+    return response.status(200).json({ message: 'success', data: ong });
   }
 
   public static async store(request: Request, response: Response) {
