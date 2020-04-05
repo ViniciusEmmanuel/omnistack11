@@ -13,7 +13,7 @@ export const Button = styled.button`
 
   font-weight: 700;
   font-size: 18px;
-  line-height: 60px;
+  line-height: 24px;
 
   text-align: center;
   text-decoration: none;
@@ -22,5 +22,19 @@ export const Button = styled.button`
   transition: filter 0.2s;
   :hover {
     filter: brightness(90%);
+  }
+
+  svg {
+    animation: rotating 2s linear infinite;
+  }
+
+  @keyframes rotating {
+    from {
+      transform: rotate(0deg);
+    }
+
+    to {
+      transform: rotate(360deg);
+    }
   }
 `;

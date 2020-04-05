@@ -1,0 +1,5 @@
+export const CONSTANTE = {
+  REQUEST_LOGON: '@logon/REQUEST_LOGON',
+  RESPONSE_LOGON: '@logon/RESPONSE_LOGON',
+  REQUEST_LOGOUT: '@logon/REQUEST_LOGOUT',
+};

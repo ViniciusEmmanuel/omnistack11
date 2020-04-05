@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import Logon from './pages/Logon';
@@ -6,19 +7,13 @@ import Register from './pages/Register';
 import Profile from './pages/Profile';
 import NewIncident from './pages/NewIncident';
 
+import { IState } from './interfaces/redux/logon';
+
 const PrivateRoutes = () => {
-  const userJson = localStorage.getItem('@behero/user');
+  const auth = useSelector<IState>((state) => state.logon.auth);
 
-  if (!userJson) {
+  if (!auth) {
     return <Redirect to="/" exact />;
-  }
-
-  if (userJson) {
-    const { email, token } = JSON.parse(userJson);
-
-    if (!email || !token) {
-      return <Redirect to="/" exact />;
-    }
   }
 
   return (
