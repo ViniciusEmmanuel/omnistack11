@@ -4,7 +4,9 @@ const getUrl = (): string => {
   if (process.env.NODE_ENV === 'production') {
     return `https://app-behero.herokuapp.com`;
   }
-  return 'http://localhost:3333';
+
+  return `https://app-behero.herokuapp.com`;
+  // return 'http://localhost:3333';
 };
 
 const api = axios.create({

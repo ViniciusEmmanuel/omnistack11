@@ -1,9 +1,10 @@
 import React, { FormEvent, useState, useEffect } from 'react';
-import api from '../../services/api';
+import { useDispatch, useSelector } from 'react-redux';
+
 import * as yup from 'yup';
 import { useHistory } from 'react-router-dom';
 
-import { FiLogIn } from 'react-icons/fi';
+import { FiLogIn, FiLoader } from 'react-icons/fi';
 
 import ImageHeroes from '../../assets/images/heroes.png';
 import ImageLogo from '../../assets/images/logo.svg';
@@ -14,14 +15,18 @@ import { StyleLink } from '../../components/Link/styles';
 
 import { MainLogon, SectionForm, ImageLarge } from './styles';
 
-import { IResposnse } from '../../interfaces/api/IResponse';
-import { IOng } from '../../interfaces/models/IOng';
+import { IState } from '../../interfaces/redux/logon';
+import { requestToLogin } from '../../store/redux/logon/actions';
 
 export default function Logon() {
   const history = useHistory();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const auth = useSelector<IState>((state) => state.logon.auth);
 
   useEffect(() => {
     const user = localStorage.getItem('@behero/user');
@@ -32,6 +37,17 @@ export default function Logon() {
       }
     }
   }, [history]);
+
+  useEffect(() => {
+    if (auth) {
+      setLoading(false);
+      history.replace('/profile');
+    }
+
+    if (!auth) {
+      setLoading(false);
+    }
+  }, [history, auth]);
 
   const handleLogin = async (event: FormEvent) => {
     event.preventDefault();
@@ -46,29 +62,8 @@ export default function Logon() {
     if (!(await schema.isValid(dataPost))) {
       return;
     }
-
-    try {
-      const { status, data: response }: IResposnse<IOng> = await api.post(
-        '/session',
-        dataPost
-      );
-      if (Number(status) === 201) {
-        const user = {
-          email: response?.data.email,
-          token: response?.data.token,
-        };
-
-        api.defaults.headers.common[
-          'Authorization'
-        ] = `Bearer ${response?.data.token}`;
-
-        localStorage.setItem('@behero/user', JSON.stringify(user));
-        history.replace('/profile', { user });
-      }
-    } catch (error) {
-      alert('Email ou password não conferem.');
-      console.log(error);
-    }
+    setLoading(true);
+    dispatch(requestToLogin(dataPost));
   };
 
   return (
@@ -91,7 +86,9 @@ export default function Logon() {
             onChange={(e) => setPassword(e.target.value)}
           />
 
-          <Button type="submit">Entrar</Button>
+          <Button type="submit" disabled={loading}>
+            {loading ? <FiLoader size={32} color="#fff" /> : 'Entrar'}
+          </Button>
 
           <StyleLink to="/register" className="register">
             <FiLogIn size={16} color="#e02041" />
