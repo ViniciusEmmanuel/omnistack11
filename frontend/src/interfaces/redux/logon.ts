@@ -1,9 +1,6 @@
-export interface IAction {
-  type: string;
-  payload: {
-    user: object;
-    auth: boolean;
-  };
+export interface ILogon {
+  email: string;
+  password: string;
 }
 
 export interface IInicialState {

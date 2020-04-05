@@ -14,9 +14,9 @@ const api = axios.create({
 });
 
 const getToken = (): string => {
-  const user = localStorage.getItem('@behero/user');
-  if (user) {
-    const { token } = JSON.parse(user);
+  const tokenJson = localStorage.getItem('@behero/token');
+  if (tokenJson) {
+    const token = JSON.parse(tokenJson);
     return `Bearer ${token}`;
   }
 

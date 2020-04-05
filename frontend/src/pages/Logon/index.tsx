@@ -29,16 +29,6 @@ export default function Logon() {
   const auth = useSelector<IState>((state) => state.logon.auth);
 
   useEffect(() => {
-    const user = localStorage.getItem('@behero/user');
-    if (user) {
-      const { email, token } = JSON.parse(user);
-      if (email && token) {
-        history.replace('/profile');
-      }
-    }
-  }, [history]);
-
-  useEffect(() => {
     if (auth) {
       setLoading(false);
       history.replace('/profile');

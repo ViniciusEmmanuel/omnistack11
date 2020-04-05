@@ -7,9 +7,16 @@ import { CONSTANTE } from './_CONSTANTS';
 import { IResposnse } from '../../../interfaces/api/IResponse';
 import { IOng } from '../../../interfaces/models/IOng';
 
-import { IAction } from '../../../interfaces/redux/logon';
+import { IAction } from '../../../interfaces/redux/redux';
 
-function* requestToLogon({ payload }: IAction) {
+interface IRequestToLogon {
+  user: {
+    email: string;
+    password: string;
+  };
+}
+
+function* requestToLogon({ payload }: IAction<IRequestToLogon>) {
   try {
     const { status, data: response }: IResposnse<IOng> = yield call(
       api.post,
@@ -18,22 +25,21 @@ function* requestToLogon({ payload }: IAction) {
     );
 
     if (status === 201) {
-      yield put(responseToLogon(true));
-
-      const user = {
-        email: response?.data.email,
-        token: response?.data.token,
-      };
-
-      api.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${response?.data.token}`;
-
-      localStorage.setItem('@behero/user', JSON.stringify(user));
+      localStorage.setItem(
+        '@behero/token',
+        JSON.stringify(response.data.token)
+      );
+      yield put(
+        responseToLogon({
+          auth: true,
+          email: response.data.email,
+          token: response.data.token,
+        })
+      );
     }
   } catch (error) {
     toast.error('Email ou senhas não conferem.');
-    yield put(responseToLogon(false));
+    yield put(responseToLogon({ auth: false, email: '', token: '' }));
   }
 }
 

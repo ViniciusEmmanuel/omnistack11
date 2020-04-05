@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import api from '../../services/api';
 
@@ -14,15 +15,18 @@ import { Container, Header, MainProfile, List } from './styles';
 import { IResposnse } from '../../interfaces/api/IResponse';
 import { IOng } from '../../interfaces/models/IOng';
 
+import { requestToLogout } from '../../store/redux/logon/actions';
+
 export default function Profile() {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const [ong, setOng] = useState<IOng>();
 
   const logout = useCallback((): void => {
-    localStorage.removeItem('@behero/user');
+    dispatch(requestToLogout());
     history.replace('/');
-  }, [history]);
+  }, [history, dispatch]);
 
   const fethcIncidentsOng = async (): Promise<void> => {
     const { status, data: response }: IResposnse<IOng> = await api.get('/ongs');
