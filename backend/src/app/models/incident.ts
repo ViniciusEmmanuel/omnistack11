@@ -47,9 +47,5 @@ export class Incident extends BaseEntity {
       delete this.ong.createdAt;
       delete this.ong.updatedAt;
     }
-
-    if (this.ong_id) {
-      delete this.ong_id;
-    }
   }
 }
