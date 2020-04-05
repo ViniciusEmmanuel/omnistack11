@@ -96,7 +96,12 @@ export default function Profile() {
                 <p>{item.description}</p>
 
                 <strong>VALOR:</strong>
-                <p>{item.value}</p>
+                <p>
+                  {Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  }).format(Number(item.value))}
+                </p>
 
                 <button
                   type="button"
